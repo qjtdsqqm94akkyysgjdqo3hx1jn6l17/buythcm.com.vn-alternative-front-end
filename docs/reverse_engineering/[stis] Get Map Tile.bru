@@ -1,0 +1,34 @@
+meta {
+  name: [stis] Get Map Tile
+  type: http
+  seq: 2
+}
+
+get {
+  url: http://map.stis.vn/bright/:index_1/:index_2/:map_tile
+  body: none
+  auth: none
+}
+
+params:path {
+  map_tile: 30797.png
+  index_2: 52189
+  index_1: 16
+}
+
+headers {
+  Host: map.stis.vn
+  User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:138.0) Gecko/20100101 Firefox/138.0
+  Accept: image/avif,image/webp,image/png,image/svg+xml,image/*;q=0.8,*/*;q=0.5
+  Accept-Language: en-US,en;q=0.5
+  Accept-Encoding: gzip, deflate
+  DNT: 1
+  Sec-GPC: 1
+  Connection: keep-alive
+  Referer: http://map.stis.vn/
+  Priority: u=4, i
+}
+
+docs {
+  Returns a PNG Image. Not much is known about the index scheme
+}

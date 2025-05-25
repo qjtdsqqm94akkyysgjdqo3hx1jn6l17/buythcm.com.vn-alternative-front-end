@@ -1,0 +1,185 @@
+meta {
+  name: [ebms] Get Possible Bus Routes
+  type: http
+  seq: 2
+}
+
+get {
+  url: http://apicms.ebms.vn/pathfinding/getpathbystop/:start_pos/:end_pos/:number_of_stops
+  body: none
+  auth: none
+}
+
+params:path {
+  end_pos: {{start_latitude}},{{start_longtitude}}
+  start_pos: {{end_latitude}},{{end_longtitude}}
+  number_of_stops: 2
+}
+
+headers {
+  Host: apicms.ebms.vn
+  User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:138.0) Gecko/20100101 Firefox/138.0
+  Accept: application/json, text/javascript, */*; q=0.01
+  Accept-Language: en-US,en;q=0.5
+  Accept-Encoding: gzip, deflate
+  Origin: http://buyttphcm.com.vn
+  DNT: 1
+  Sec-GPC: 1
+  Connection: keep-alive
+  Referer: http://apicms.ebms.vn/
+  Priority: u=0
+}
+
+vars:pre-request {
+  start_latitude: 10.768850924804605
+  start_longtitude: 106.68900060660235
+  end_latitude: 10.771464806250796
+  end_longtitude: 106.69524478918902
+}
+
+docs {
+  The response is a quite lengthy json array of possible bus routes from point A to B, each item consits of the following:
+  
+  - A `detail` array consisting of individual legs of the trip (say, "Walk from A to B, then take bus number 10 from B to C", and walk from C to D), following this scheme:
+      | Field | Data type | Desc. |
+      |-------|-----------|-------|
+      | ImageUrl | String or null | Image URL of the transportation type  (uses back slashes "\" for some reason) |
+      | RouteNo | String or null | Bus route number |
+      | EndStop | String or null | Readable Final destination of the route |
+      | GetIn, GetOff | String | Readable Description of point, either stop name with code or `[Tọa độ điểm...]` |
+      | GetInLat | Number | Latitude of boarding location |
+      | GetInLng | Number | Longitude of boarding location |
+      | GetOffLat | Number | Latitude of alighting location |
+      | GetOffLng | Number | Longitude of alighting location |
+      | Halt | Number | ??? |
+      | Length | String (of number) | Bird's path between 2 points?? |
+      | Distance | String (of number) | Actual traversal Distance?? |
+      | Fare | Number | Ticket price (in Vietnamese Dong) |
+  
+  - A Redundant coodinate of each point of note in the trips (eg. the affordmentioned A, B, C and D, etc.) called `stops`:
+      | Field | Data type | Desc. |
+      |-------|-----------|-------|
+      | Name | String | Tọa độ điểm xuất phát |
+      | Lat | Float | Latitude coordinate (10.771464347839355) |
+      | Lng | Float | Longitude coordinate (106.69524383544922) |
+      | Type | Integer | Value: `0` == starting location; `1` == bus stops; `-2` == desitnation |
+  
+  - A array of list of coordinates to plot the bus route, each Item coressponse to a leg of a bus, in a really cursed format:
+      | Field | Data type | Desc. |
+      |-------|-----------|-------|
+      | `<Route_Number>_<Stop_Name_Start>_<Stop_Name_End>` (tentative name "Key") | JSON Array | Complex name in format |
+      Each key containing:
+      | Latitude | Float | Geographic latitude coordinates for points |
+      | Longitude | Float | Geographic longitude coordinates for points |
+  
+  - A `Title`
+  - and a `Desc`
+  
+  Example:
+  ```json
+  [
+    {
+      "detail": [
+        {
+          "ImageUrl": "\\Assets\\Icon\\walk.png",
+          "RouteNo": null,
+          "EndStop": null,
+          "GetIn": "[Tọa độ điểm xuất phát] ",
+          "GetInLat": 10.771464347839355,
+          "GetInLng": 106.69524383544922,
+          "GetOff": "[Q1 187] Khách sạn New World",
+          "GetOffLat": 10.770964,
+          "GetOffLng": 106.695946,
+          "Halt": 0,
+          "Length": "68",
+          "Distance": "95",
+          "Fare": 0
+        },
+        {
+          "ImageUrl": null,
+          "RouteNo": "03",
+          "EndStop": "Bến xe buýt Sài Gòn",
+          "GetIn": "[Q1 187] Khách sạn New World",
+          "GetInLat": 10.770964,
+          "GetInLng": 106.695946,
+          "GetOff": "[BX 01] Bến xe buýt Sài Gòn",
+          "GetOffLat": 10.767676,
+          "GetOffLng": 106.689362,
+          "Halt": 0,
+          "Length": "163",
+          "Distance": "897",
+          "Fare": 6000
+        },
+        {
+          "ImageUrl": "\\Assets\\Icon\\walk.png",
+          "RouteNo": null,
+          "EndStop": null,
+          "GetIn": "[BX 01] Bến xe buýt Sài Gòn",
+          "GetInLat": 10.767676,
+          "GetInLng": 106.689362,
+          "GetOff": "[Tọa độ điểm đến] ",
+          "GetOffLat": 10.768851280212402,
+          "GetOffLng": 106.68900299072266,
+          "Halt": 0,
+          "Length": "98",
+          "Distance": "136",
+          "Fare": 0
+        }
+      ],
+      "stops": [
+        {
+          "Name": "[Tọa độ điểm xuất phát] ",
+          "Lat": 10.771464347839355,
+          "Lng": 106.69524383544922,
+          "Type": 0
+        },
+        {
+          "Name": "[Q1 187] Khách sạn New World",
+          "Lat": 10.770964,
+          "Lng": 106.695946,
+          "Type": 1
+        },
+        {
+          "Name": "[Q1 188] Nguyễn Thị Nghĩa",
+          "Lat": 10.769952,
+          "Lng": 106.693495,
+          "Type": 1
+        },
+        {
+          "Name": "[Q1 189] Tôn Thất Tùng",
+          "Lat": 10.768761,
+          "Lng": 106.690469,
+          "Type": 1
+        },
+        {
+          "Name": "[BX 01] Bến xe buýt Sài Gòn",
+          "Lat": 10.767676,
+          "Lng": 106.689362,
+          "Type": 1
+        },
+        {
+          "Name": "[Tọa độ điểm đến] ",
+          "Lat": 10.768851280212402,
+          "Lng": 106.68900299072266,
+          "Type": -2
+        }
+      ],
+      "coordRoute": {
+        "03_[Q1 187] Khách sạn New World_[BX 01] Bến xe buýt Sài Gòn": [
+          {
+            "Latitude": 10.770964,
+            "Longitude": 106.695946
+          },
+          {
+            "Latitude": 10.77096367,
+            "Longitude": 106.69594574
+          } // the rest were trimmed
+        ]
+      },
+      "Title": "Đi tuyến: 03",
+      "Desc": "Số tuyến cần đi: 1\nĐi bộ: 0.2 km; Xe buýt: 0.9 km"
+    }
+  ]
+  ```
+  
+}

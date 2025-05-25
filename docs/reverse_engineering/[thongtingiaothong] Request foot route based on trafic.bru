@@ -1,0 +1,34 @@
+meta {
+  name: [thongtingiaothong] Request foot route based on trafic
+  type: http
+  seq: 2
+}
+
+get {
+  url: http://api.thongtingiaothong.vn/v2/route/foot/106.68900299072266,10.768851280212402;106.689362,10.767676?steps=false&geometries=polyline&overview=full
+  body: none
+  auth: none
+}
+
+params:query {
+  steps: false
+  geometries: polyline
+  overview: full
+}
+
+headers {
+  Host: api.thongtingiaothong.vn
+  User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:138.0) Gecko/20100101 Firefox/138.0
+  Accept: application/json, text/javascript, */*; q=0.01
+  Accept-Language: en-US,en;q=0.5
+  Accept-Encoding: gzip, deflate
+  Origin: http://buyttphcm.com.vn
+  DNT: 1
+  Sec-GPC: 1
+  Connection: keep-alive
+  Referer: http://api.thongtingiaothong.vn/
+}
+
+docs {
+  Get walking routes persumably based on current traffic situation, currently only returns 404 
+}

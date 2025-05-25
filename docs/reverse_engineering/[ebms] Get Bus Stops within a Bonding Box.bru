@@ -1,0 +1,89 @@
+meta {
+  name: [ebms] Get Bus Stops within a Bonding Box
+  type: http
+  seq: 1
+}
+
+get {
+  url: http://apicms.ebms.vn/businfo/getstopsinbounds/:lower_longtitude/:lower_latitude/:upper_longtitude/:upper_latitude
+  body: none
+  auth: none
+}
+
+params:path {
+  upper_longtitude: 106.70655641555786
+  upper_latitude: 10.772645263811139
+  lower_longtitude: 106.68651666641236
+  lower_latitude: 10.763876057931437
+}
+
+headers {
+  Host: apicms.ebms.vn
+  User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:138.0) Gecko/20100101 Firefox/138.0
+  Accept: */*
+  Accept-Language: en-US,en;q=0.5
+  Accept-Encoding: gzip, deflate
+  Origin: http://buyttphcm.com.vn
+  DNT: 1
+  Sec-GPC: 1
+  Connection: keep-alive
+  Referer: http://apicms.ebms.vn/
+  Priority: u=0
+}
+
+docs {
+  ## An example response might looks like this:
+  ```json
+  [
+    {
+      "StopId": 25,
+      "Code": "Q1 136",
+      "Name": "Rạp Trần Hưng Đạo",
+      "StopType": "Nhà chờ",
+      "Zone": "Quận 1",
+      "Ward": "Phường Cô Giang",
+      "AddressNo": "227 - 229 (255)",
+      "Street": "Trần Hưng Đạo",
+      "SupportDisability": "",
+      "Status": "Đang khai thác",
+      "Lng": 106.692722,
+      "Lat": 10.76483,
+      "Search": "RTHD 227-229( THD",
+      "Routes": "01, 139, 152"
+    }
+  ]  
+  ```
+  And with header:
+  ```http
+  server: nginx/1.14.0 (Ubuntu)
+  date: Wed, 21 May 2025 12:58:16 GMT
+  content-type: application/json; charset=utf-8
+  content-length: 4551
+  connection: keep-alive
+  cache-control: no-cache
+  pragma: no-cache
+  expires: -1
+  access-control-allow-origin: http://buyttphcm.com.vn
+  x-aspnet-version: 4.0.30319
+  x-powered-by: ASP.NET
+  ```
+  
+  ## Fields:
+  
+  | Field             | Type   | Desc |
+  |-------------------|--------|---|
+  | StopId            | Int    | |
+  | Code              | String | |
+  | Name              | String | |
+  | StopType          | String | |
+  | Zone              | String | |
+  | Ward              | String | |
+  | AddressNo         | String | |
+  | Street            | String | |
+  | SupportDisability | String | |
+  | Status            | String | |
+  | Lng               | Float  | |
+  | Lat               | Float  | |
+  | Search            | String | |
+  | Routes            | String | |
+}
