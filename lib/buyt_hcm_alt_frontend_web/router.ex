@@ -1,8 +1,24 @@
 defmodule BuytHcmAltFrontendWeb.Router do
+  # alias BuytHcmAltFrontendWeb.GreetControler
   use BuytHcmAltFrontendWeb, :router
 
   pipeline :api do
     plug :accepts, ["json"]
+  end
+
+  pipeline :browser do
+    plug :accepts, ["html"]
+    plug :fetch_session
+    # plug :fetch_live_flash
+    plug :put_root_layout, html: {BuytHcmAltFrontendWeb.Layouts, :root}
+    plug :protect_from_forgery
+    plug :put_secure_browser_headers
+  end
+
+  scope "/", BuytHcmAltFrontendWeb do
+    # TODO: add anti scraping as a plug
+    pipe_through :browser
+    get "/", GreetController, :index
   end
 
   scope "/api", BuytHcmAltFrontendWeb do

@@ -58,6 +58,15 @@ defmodule BuytHcmAltFrontendWeb do
     end
   end
 
+  def html do
+    quote do
+      use Phoenix.Component
+      # Import convenience functions from controllers
+      import Phoenix.Controller,
+        only: [get_csrf_token: 0, view_module: 1, view_template: 1]
+    end
+  end
+
   @doc """
   When used, dispatch to the appropriate controller/live_view/etc.
   """

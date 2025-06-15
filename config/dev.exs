@@ -9,7 +9,8 @@ import Config
 config :buyt_hcm_alt_frontend, BuytHcmAltFrontendWeb.Endpoint,
   # Binding to loopback ipv4 address prevents access from other machines.
   # Change to `ip: {0, 0, 0, 0}` to allow access from other machines.
-  http: [ip: {127, 0, 0, 1}, port: 4000],
+  # ...Or to actually have access from outside the rootless Podman container
+  http: [ip: {0, 0, 0, 0}, port: 4000],
   check_origin: false,
   code_reloader: true,
   debug_errors: true,
