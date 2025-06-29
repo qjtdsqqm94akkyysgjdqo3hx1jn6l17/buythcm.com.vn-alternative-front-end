@@ -5,7 +5,7 @@ defmodule BuytHcmAltFrontendWeb.Structs.Journey do
     :dest_coord,
     :routes,
     :total_distance,
-    :total_price
+    :total_cost
   ]
 
   alias BuytHcmAltFrontendWeb.Types
@@ -15,7 +15,7 @@ defmodule BuytHcmAltFrontendWeb.Structs.Journey do
           start_coord: Types.coord(),
           dest_coord: Types.coord(),
           total_distance: float(),
-          total_price: non_neg_integer(),
+          total_cost: non_neg_integer(),
           routes: [String.t()]
         }
 end
