@@ -52,4 +52,22 @@ defmodule BuytHcmAltFrontendWeb.ListUtilities do
 
     Enum.chunk_while(elements_list, {breakpoints, []}, chunk_fun, after_fun)
   end
+
+  def to_sentence(list, opts \\ []) when is_list(list) do
+    separator = opts |> Keyword.get(:separator, ", ")
+    last_separator = opts |> Keyword.get(:connector, " & ")
+    case list do
+      [] -> "¯\_(ツ)_/¯"
+      [single] -> single |> to_string
+      mutiple ->
+        do_to_sentence(mutiple, separator, last_separator)
+    end
+  end
+
+  defp do_to_sentence([last], _separator, last_separator) do
+    to_string(last_separator) <> to_string(last)
+  end
+  defp do_to_sentence([thingy | rest], separator, last_separator) do
+    to_string(thingy) <> do_to_sentence(List.wrap(rest), separator, last_separator)
+  end
 end

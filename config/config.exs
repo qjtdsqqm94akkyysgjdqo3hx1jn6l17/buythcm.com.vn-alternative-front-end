@@ -44,6 +44,11 @@ config :buyt_hcm_alt_frontend,
        :bus_site_adapter,
        BuytHcmAltFrontendWeb.BuytchmComVnAdapter
 
+# setup Gettext, following https://thelinuxcode.com/the-definitive-guide-to-localization-in-phoenix-with-gettext/
+config :my_app, BuytHcmAltFrontendWeb.Gettext,
+       locales: ["vi", "en", "de"],
+       default_locale: "vi"
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{config_env()}.exs"
