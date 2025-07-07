@@ -14,11 +14,16 @@ defmodule BuytHcmAltFrontendWeb.BusServiceUtility do
               maxHops :: integer()
             ) :: any()
 
-  @callback get_routes(
+  @callback get_routes!(
               from_coords :: Types.coord(),
               to_coords :: Types.coord(),
               maxHops :: integer()
             ) :: [Types.journey()]
+  @callback get_routes(
+              from_coords :: Types.coord(),
+              to_coords :: Types.coord(),
+              maxHops :: integer()
+            ) :: {:ok, [Types.journey()]} | {:error, msg :: any()}
 
   # Public functions that wraps around the adapter modules
   @spec get_routes_raw(
@@ -30,11 +35,20 @@ defmodule BuytHcmAltFrontendWeb.BusServiceUtility do
     adapter().get_routes_raw({fro_lat, fro_lon}, {to_lat, to_lon}, maxHops)
   end
 
-  @spec get_routes_raw(
+  @spec get_routes!(
           from_coords :: Types.coord(),
           to_coords :: Types.coord(),
           maxHops :: integer()
-        ) :: any()
+        ) :: [Types.journey()]
+  def get_routes!({fro_lat, fro_lon}, {to_lat, to_lon}, maxHops) do
+    adapter().get_routes!({fro_lat, fro_lon}, {to_lat, to_lon}, maxHops)
+  end
+
+  @spec get_routes(
+          from_coords :: Types.coord(),
+          to_coords :: Types.coord(),
+          maxHops :: integer()
+        ) :: {:ok, [Types.journey()]} | {:error, msg :: any()}
   def get_routes({fro_lat, fro_lon}, {to_lat, to_lon}, maxHops) do
     adapter().get_routes({fro_lat, fro_lon}, {to_lat, to_lon}, maxHops)
   end

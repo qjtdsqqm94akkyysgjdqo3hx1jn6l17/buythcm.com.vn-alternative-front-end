@@ -10,6 +10,21 @@ defmodule BuytHcmAltFrontendWeb.BuytchmComVnAdapter do
       get_routes_raw(from_coords, to_coords, maxHops)
 
     # data
+    try do
+      Enum.map(data, fn journey_data -> parse_journey(journey_data) end)
+    catch
+      err -> {:error, inspect(err)}
+    else
+      journeys -> {:ok, journeys}
+    end
+  end
+
+  @impl true
+  def get_routes!(from_coords, to_coords, maxHops) do
+    {:ok, %Req.Response{status: 200, body: data}} =
+      get_routes_raw(from_coords, to_coords, maxHops)
+
+    # data
     Enum.map(data, fn journey_data -> parse_journey(journey_data) end)
   end
 
