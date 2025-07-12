@@ -30,7 +30,7 @@ defmodule BuytHcmAltFrontendWeb.BuytchmComVnAdapter do
 
   @spec parse_journey(journey_data :: map()) :: Types.journey()
   defp parse_journey(journey_data) do
-    journey_data |> dbg()
+    # journey_data |> dbg()
     legs = parse_legs(journey_data)
 
     # itterate through list once for these 3
@@ -41,10 +41,10 @@ defmodule BuytHcmAltFrontendWeb.BuytchmComVnAdapter do
           case element.type do
             :bus ->
               {
-                if is_number(element.distance) do
+                if is_number(element.distance) && is_number(distance) do
                   element.distance + distance
                 end,
-                if is_number(element.distance) do
+                if is_number(element.fare) && is_number(cost) do
                   element.fare + cost
                 end,
                 [element.route | routes_rev]
