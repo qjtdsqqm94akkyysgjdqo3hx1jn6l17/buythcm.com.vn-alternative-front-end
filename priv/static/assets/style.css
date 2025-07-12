@@ -1,0 +1,89 @@
+@font-face {
+  font-family: "Recursive";
+  src: url("/fonts/RecursiveSansCslSt-Regular.woff2");
+}
+
+body, input, label {
+    font-family: "Recursive", monospace;
+    text-align: center;
+}
+input[readonly] {
+    border: none;
+    font-size: 1rem;
+}
+section {
+    /* 1 ch ~= 0.5 rem usually */
+    text-align: justify;
+    width: auto;
+    display: inline-block;
+    padding: 1rem;
+    vertical-align: top;
+    border-right: 0.125rem solid;
+}
+section.results {
+    max-width: 27rem;
+}
+
+section.input {
+    max-width: calc(100vw - 3rem);
+    width: 54rem;
+}
+
+section:last-child{
+    border-right: none;
+}
+
+section hr {
+    width: 66.6%;
+    margin-bottom: 3rem;
+}
+
+.connected-list {
+  list-style-type: none;
+  padding-left: inherit;
+  line-height: 1;
+}
+
+
+.connected-list li:first-child:before {
+    content: "┏━\2007";
+}
+
+.connected-list li:not(:last-child):not(:first-child):before {
+  content: "┇\2007\2007";
+}
+
+.connected-list li:not(:last-child):after {
+  content: "\A┇\2007\2007↓";
+  white-space:pre;
+}
+.connected-list li:last-child:before {
+    content: "┗━\2007";
+}
+
+.on-foot li:last-child:after {
+  content: "[]\A┇";
+  white-space:pre;
+}
+details summary::marker {
+    content: none;
+}
+
+details > summary > h2:before {
+    content: "▶\2007";
+}
+details[open] > summary > h2:before {
+    content: "▼\2007";
+}
+
+div#map {
+    font-family: inherit;
+    aspect-ratio: 3/2;
+    width: 100%;
+    height: auto;
+}
+
+
+ul.photon-autocomplete {
+    padding: 0px;
+}
