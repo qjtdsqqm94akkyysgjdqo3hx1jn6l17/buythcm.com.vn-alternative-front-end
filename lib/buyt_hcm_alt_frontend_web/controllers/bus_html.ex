@@ -18,6 +18,7 @@ defmodule BuytHcmAltFrontendWeb.BusHTML do
 
   def routes_section(assigns) do
     ~H"""
+    <%= if @routes do %>
     <section class="results">
       <header>
       Possible routes:
@@ -29,11 +30,13 @@ defmodule BuytHcmAltFrontendWeb.BusHTML do
         <.route_details journey={route}/>
       </div>
     </section>
+    <% end %>
     """
   end
 
   attr :open, :boolean, default: false
   attr :journey, BuytHcmAltFrontendWeb.Structs.Journey, required: true
+
   def route_details(assigns) do
     import BuytHcmAltFrontendWeb.ListUtilities, only: [to_sentence: 2]
     # TODO: naming consistencies

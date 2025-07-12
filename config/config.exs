@@ -45,7 +45,7 @@ config :buyt_hcm_alt_frontend,
        BuytHcmAltFrontendWeb.BuytchmComVnAdapter
 
 # setup Gettext, following https://thelinuxcode.com/the-definitive-guide-to-localization-in-phoenix-with-gettext/
-config :my_app, BuytHcmAltFrontendWeb.Gettext,
+config :buyt_hcm_alt_frontend, BuytHcmAltFrontendWeb.Gettext,
        locales: ["vi", "en", "de"],
        default_locale: "vi"
 

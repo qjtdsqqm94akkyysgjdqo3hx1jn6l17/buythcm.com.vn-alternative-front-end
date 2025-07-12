@@ -18,7 +18,16 @@ defmodule BuytHcmAltFrontendWeb.Router do
   scope "/", BuytHcmAltFrontendWeb do
     # TODO: add anti scraping as a plug
     pipe_through :browser
-    get "/:start_lat/:start_lng/:dest_lat/:dest_lng/:max_hop", BusController, :get_routes
+
+    get "/", BusController, :index
+    get "/routes", BusController, :get_routes
+
+    # get "/:start_coord/:dest_coord/:max_hop", BusController, :get_routes
+
+    get "/routes/:start_lat/:start_lng/:dest_lat/:dest_lng/:max_hop",
+        BusController,
+        :get_routes_old
+
     get "/hello", GreetController, :index
   end
 
