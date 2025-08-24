@@ -1,0 +1,142 @@
+<.routes_section routes={@routes |> dbg()}/>
+
+<section class="input">
+  <formset name="journey-input">
+    <legend>{gettext "Where do you want to go?"}</legend>
+    <form action="/routes" method="get">
+    <p>
+      <label for="start_coord">
+        <b>{gettext "Starting position: "}</b>
+        <label for="start_coord" id="start_name"></label>
+        <input required id="start_coord" name="from" type="text" pattern="-?\d+\.\d+/-?\d+\.\d+"/>
+        <span class="validity"></span>
+      </label><p>
+    </p>
+      <label for="dest_coord">
+        <b>{gettext "Destination: "}</b>
+        <label for="dest_coord" id="dest_name"></label>
+        <input required id="dest_coord" name="to" type="text" pattern="-?\d+\.\d+/-?\d+\.\d+"/>
+        <span class="validity"></span>
+      </label>
+    </p>
+    <p>
+      <label for="max_trips">
+        <b>{gettext "Max trips: "}</b>
+      </label>
+      <input required id="max_trips" name="max_trips" type="number" value="2" min="1">
+    </p>
+
+      <button type="submit">{gettext "Find Routes"}</button>
+      <button type="reset">{gettext "Clear Form"}</button>
+    </form>
+    <button type="button" onclick="toogleCoordsReadonly()">{gettext "Edit Coordinates Directly"}</button>
+  </formset>
+  <div>
+    <p id="selected_name">{gettext "Details"}: <i></i></p>
+    <p id="selected_latlng">{gettext "Latitude/Longtitude"}: <i></i></p>
+    <button type="button" onclick="addCoordToField('dest_coord')">{gettext "Set as Destination"}</button>
+    <button type="button" onclick="addCoordToField('start_coord')">{gettext "Set as Start Location"}</button>
+
+  </div>
+  <div id="map"></div>
+  <%!-- Import Leaflet map and its geocode plugin --%>
+  <link
+    rel="stylesheet"
+    href="/assets/vendors/leaflet@1.9.4/dist/leaflet.css"
+    crossorigin=""
+  />
+  <script
+    src="/assets/vendors/leaflet@1.9.4/dist/leaflet.js"
+    crossorigin=""
+  ></script>
+  <link
+    rel="stylesheet"
+    href="/assets/vendors/leaflet.proton-master/leaflet.photon.css"
+  />
+  <script
+    src="/assets/vendors/leaflet.proton-master/leaflet.photon.js"></script>
+
+  <script>
+    if(! document.getElementById){
+      alert('Browser not supporting basic DOM API. (What kinda fossil are you running?)');
+    }
+
+    function toogleCoordsReadonly() {
+      let coordInputIds=[ 'dest_coord', 'start_coord' ];
+      coordInputIds.map((id) => {
+
+        let inputElement=document.getElementById(id);
+        if(inputElement.hasAttribute("readonly")){
+          inputElement.removeAttribute("readonly");
+        } else {
+          inputElement.setAttribute("readonly", "");
+        }
+      });
+    }
+    // make the coordinate fields real-only (the "failed open" way)
+    toogleCoordsReadonly();
+
+    function addCoordToField(id) {
+      let inputElement=document.getElementById(id);
+      let coordinate=document.getElementById('selected_latlng').firstChild.data;
+      inputElement.value = coordinate;
+    }
+    var geocodeResultMarkers = null;
+    function geocodeHandler(geojson) {
+        if(geocodeResultMarkers){
+          geocodeResultMarkers.remove();
+        }
+        geocodeResultMarkers =
+        L.geoJSON(geojson, {
+            style: function (feature) {
+                return {color: feature.properties.color};
+            },
+            onEachFeature: function (feature, layer) {
+              layer.on('click', (event) => {
+                    var description = "";
+                    if (feature.properties && feature.properties.popupContent) {
+                        description = feature.properties.popupContent;
+                    }
+                    showLocationInfo(event.latlng, description);
+                  });
+
+            }
+        }).addTo(map);
+    };
+
+    function showLocationInfo(latLng, description){
+      document.getElementById('selected_name').firstChild.data=`${description}`
+      document.getElementById('selected_latlng').firstChild.data=`${(latLng.lat).toFixed(5)}/${(latLng.lng).toFixed(5)}`
+    }
+
+    var map = L.map('map', {
+      photonControl: true,
+      photonControlOptions: {
+          url: "https://photon.komoot.io/api/?layer=house&layer=street&layer=locality&",
+          resultsHandler: geocodeHandler,
+          limit: 15,
+          placeholder: 'Try me …',
+          position: 'topright',
+          feedbackEmail: null,
+          submitDelay: 700,
+          bbox: [106.354, 9.460, 107.584, 11.161]
+          }
+      }
+    ).setView([10.775, 106.683], 12);
+
+    L.tileLayer('https://map.stis.vn/bright/{z}/{x}/{y}.png', {
+        maxZoom: 17,
+        attribution: '<a href="https://map.stis.vn">map.stis.vn</a>'
+      }).addTo(map);
+
+    var selectedPoint = null;
+
+    map.on('click', (event) => {
+      if(selectedPoint){
+        selectedPoint.remove();
+      }
+      selectedPoint=L.marker(event.latlng).addTo(map);
+      showLocationInfo(event.latlng, "");
+    });
+  </script>
+</section>
